@@ -1,0 +1,50 @@
+# Problem 1
+key=MALLORY
+
+In order to solve a Vigenere cipher without a known key, we first want to find a pattern in the ciphertext
+to find how long the key should be. After having the length of the key, we calculate frequency analysis and
+deduce the specific letters of the key through trial and error. The specific steps are detailed below.
+
+
+Using the steps from Wikipedia's Kasiski examination (https://en.wikipedia.org/wiki/Kasiski_examination)
+and an answer from a Quora page (https://www.quora.com/How-can-I-crack-the-Vigenere-cipher-without-knowing-the-key), 
+a naive approach was followed by manually looking at the first line of the ciphertext
+and finding repeating letters. There are pairs of duplicate letters as well as a pattern of PGE, PHE, PEW in the first line.
+However the most successful pattern is seen in the first 10 letters in which we see ZOHESTF ZOW. The repeatition of ZO and then 
+some letters might indidcate a pattern that we want to follow. It is assumed that the length of the key is 7 since there are 7 
+letters between the first and second 'Z'
+
+Using frequency analysis, we can see the amount of times a specific letter is used in its relative position. Since there was no 
+convenient method to conduct this without using online resources, the commented portion of the Python file, "vigenere_decrypt.py"
+will compute our frequency analysis. Since this is a naive approach, we can manually print the frequency of each letter by changing 
+the variable name of which position we want to see. For example, if we want to see the character frequency in position 4 of the key, 
+we set the counter variable to 'fourth'. By printing each of these frequencies, we can gain insight to possible keys.
+
+Example output of the frequency counter for position 4: Counter({'Z': 24, 'E': 23, 'P': 21, 'D': 15, 'T': 12, 'L': 11, 'Y': 10, 'C': 10, 'W': 8, 'S': 6, 'F': 6, 'H': 5, 'O': 3, 'G': 3, 'Q': 3, 'M': 3, 'X': 2, 'A': 2, 'R': 2, 'N': 2, 'J': 1})
+
+Using the highest character frequencies, we get the key: QEPZBKC which when used to decode, outputs gibberish that is not very helpful. 
+The output of the first 7 letters is: JKSFRJD . As indicated by the Quora thread, we are now trying to a solve version of a Ceaser 
+cipher where each character has a specific offset. Going through offsets for each letter of our key, we see a recognizable English 
+word "NOW" in our plaintext output when the offset is 4. With an offset of 4 for all the letters in our key, the new key is MALVXGY
+and has an output of "NOWJVNH" for the first seven characters.
+
+Since the first three letters of our key form a word, we want to look the rest of the letters in the key. We assume that the other
+letters are incorrect and need to look at the next highest frequencies from our counter. Looking at letter 4 of our key, the next highest
+character frequency is 'E' and becomes 'A' with our offset of 4. The key is now MALAXGY with an output of NOWEVNH which could be correct
+so we move to the fifth letter of key and apply a similar change in which the second highest character frequecy is F, offset to B with a
+plaintext result of NOWERCH which may seem fine but looking to the next set of 7 plaintext letters, we get NOLZTYI which is clearly not a word.
+Therefore, we repeat the process of correcting the key with the next highest frequencies from key letter positions 4, 5 & 6 until we get the
+key MALLBRY and the output NOWTRCH which when going in order indicates that there is an issue in position 5 since we need a vowel.
+By moving to the fourth highest frequency, we can see that the key is S, shifted by 4 to the letter O and cleverly creates the key MALLORY.
+
+Now that we have the key, we subtract the ciphertext's index in the alphabet with the key's index in the alphabet to find the plaintext message:
+
+NOWTECHNOLOGYISEVOLVINGSORAPIDLYTHATNEWQUESTIONSAREBEINGASKEDANDIAMOFTHEVIEWTHATTHEREAREVERYREALREASONSWHYWEWANTTOMAKESURETHEGOVERNMENTCANNOT
+JUSTWILYNILLYGETINTOEVERYBODYSIPHONESORSMARTPHONESTHATAREFULLOFVERYPERSONALINFORMATIONORVERYPERSONALDATALETSFACEITTHEWHOLESNOWDENDISCLOSURE
+EPISODEELEVATEDPEOPLESSUSPICIONOFTHISSODOESPOPULARCULTUREBYTHEWAYWHICHMAKESITAPPEARASIFIMINTHESITROOMANDIMMOVINGTHINGSTHERESSOMEHALFAFINGERPRINT
+ANDHALFANHOURLATERIMTRACKINGTHEGUYINTHESTREETSOFISTANBULITTURNSOUTITDOESNTWORKTHATWAYSOMETIMESIMJUSTTRYINGTOGETACONNECTIONIWILLSAYBYTHEWAYANDIDONT
+WANTTOGOTOOFARAFIELDBUTTHESNOWDENISSUEVASTLYOVERSTATEDTHEDANGERSTOUSCITIZENSINTERMSOFSPYINGBECAUSETHEFACTOFTHEMATTERISTHATOURINTELLIGENCEAGENCIES
+AREPRETTYSCRUPULOUSABOUTUSPERSONSPEOPLEONUSSOILWHATTHOSEDISCLOSURESDIDIDENTIFYWASEXCESSESOVERSEASWITHRESPECTTOPEOPLEWHOARENOTINTHISCOUNTRYALOTOF
+THOSEHAVEBEENFIXEDDONTTAKEMYWORDFORITTHEREWASANINDEPENDENTPANELTHATJUSTGRADEDTHEREFORMSTHATWESETUPTOAVOIDTHOSECHARGESBUTIUNDERSTANDTHATTHATRAISED
+SUSPICIONSSOWERECONCERNEDABOUTPRIVACYWEDONTWANTGOVERNMENTTOBELOOKINGTHROUGHEVERYBODYSPHONESWILLYNILLYWITHOUTANYKINDOFOVERSIGHTORPROBABLECAUSEORACLEAR
+SENSETHATITSTARGETEDATSOMEONEWHOMIGHTBEAWRONGDOER
